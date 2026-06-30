@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ascend OS — Personal Growth Operating System</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="dark-mode">
+
+<!-- ████████████████████████████████████████
+     AUTH WRAPPER
+████████████████████████████████████████ -->
+<div id="authWrapper" class="auth-wrapper">
+
+  <!-- Background particles -->
+  <canvas id="authCanvas" class="auth-canvas"></canvas>
+
+  <!-- AUTH: LOGIN -->
+  <div class="auth-card" id="loginCard">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><i class="fa fa-bolt"></i></div>
+      <div>
+        <div class="auth-logo-title">Ascend OS</div>
+        <div class="auth-logo-sub">Personal Growth Operating System</div>
+      </div>
+    </div>
+    <h2 class="auth-heading">Welcome Back 👋</h2>
+    <p class="auth-sub">Sign in to continue your journey</p>
+
+    <div class="form-group">
+      <label>Username or Email</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-user"></i>
+        <input type="text" id="loginUser" placeholder="Enter username or email" autocomplete="username"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-lock"></i>
+        <input type="password" id="loginPass" placeholder="Enter your password" autocomplete="current-password"/>
+        <button class="eye-btn" onclick="toggleEye('loginPass',this)"><i class="fa fa-eye"></i></button>
+      </div>
+    </div>
+    <div class="auth-row">
+      <label class="check-label"><input type="checkbox" id="rememberMe"/> Remember me</label>
+      <a href="#" class="auth-link" onclick="showAuth('forgotCard')">Forgot Password?</a>
+    </div>
+    <button class="btn-auth" onclick="doLogin()"><i class="fa fa-sign-in-alt"></i> Sign In</button>
+    <div class="auth-divider"><span>OR</span></div>
+    <button class="btn-auth-outline" onclick="showAuth('registerCard')">
+      <i class="fa fa-user-plus"></i> Create New Account
+    </button>
+  </div>
+
+  <!-- AUTH: REGISTER -->
+  <div class="auth-card hidden" id="registerCard">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><i class="fa fa-bolt"></i></div>
+      <div>
+        <div class="auth-logo-title">Ascend OS</div>
+        <div class="auth-logo-sub">Create Your Account</div>
+      </div>
+    </div>
+    <h2 class="auth-heading">Start Your Journey 🚀</h2>
+
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="regFname" placeholder="Samir"/>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" id="regLname" placeholder="Khan"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-at"></i>
+        <input type="text" id="regUser" placeholder="samir_ascend"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-envelope"></i>
+        <input type="email" id="regEmail" placeholder="samir@example.com"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Age</label>
+      <input type="number" id="regAge" placeholder="20" min="10" max="100"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-lock"></i>
+        <input type="password" id="regPass" placeholder="Min 6 characters" oninput="checkStrength(this.value)"/>
+        <button class="eye-btn" onclick="toggleEye('regPass',this)"><i class="fa fa-eye"></i></button>
+      </div>
+      <div class="strength-bar"><div id="strengthFill"></div></div>
+      <small id="strengthText"></small>
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-lock"></i>
+        <input type="password" id="regPassConf" placeholder="Re-enter password"/>
+        <button class="eye-btn" onclick="toggleEye('regPassConf',this)"><i class="fa fa-eye"></i></button>
+      </div>
+    </div>
+    <button class="btn-auth" onclick="doRegister()"><i class="fa fa-user-plus"></i> Create Account</button>
+    <div class="auth-divider"><span>Already have an account?</span></div>
+    <button class="btn-auth-outline" onclick="showAuth('loginCard')">
+      <i class="fa fa-sign-in-alt"></i> Sign In
+    </button>
+  </div>
+
+  <!-- AUTH: FORGOT PASSWORD -->
+  <div class="auth-card hidden" id="forgotCard">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><i class="fa fa-key"></i></div>
+      <div>
+        <div class="auth-logo-title">Reset Password</div>
+        <div class="auth-logo-sub">We'll send you a reset link</div>
+      </div>
+    </div>
+    <h2 class="auth-heading">Forgot Password? 🔑</h2>
+    <p class="auth-sub">Enter your email to receive reset instructions</p>
+    <div class="form-group">
+      <label>Email Address</label>
+      <div class="input-icon-wrap">
+        <i class="fa fa-envelope"></i>
+        <input type="email" id="forgotEmail" placeholder="your@email.com"/>
+      </div>
+    </div>
+    <button class="btn-auth" onclick="doForgot()"><i class="fa fa-paper-plane"></i> Send Reset Link</button>
+    <button class="btn-auth-outline" onclick="showAuth('loginCard')" style="margin-top:10px">
+      <i class="fa fa-arrow-left"></i> Back to Sign In
+    </button>
+  </div>
+
+</div><!-- /authWrapper -->
+
+
+<!-- ████████████████████████████████████████
+     MAIN APP (hidden until login)
+████████████████████████████████████████ -->
+<div id="appWrapper" class="app-wrapper hidden">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon"><i class="fa fa-bolt"></i></div>
+        <span class="sidebar-logo-text">Ascend OS</span>
+      </div>
+      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+    </div>
+
+    <!-- User mini profile -->
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName">Samir</div>
+        <div class="sidebar-user-level">
+          <i class="fa fa-star"></i> <span id="sidebarLevel">Level 1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- XP Bar -->
+    <div class="sidebar-xp">
+      <div class="sidebar-xp-bar">
+        <div class="sidebar-xp-fill" id="sidebarXpFill" style="width:20%"></div>
+      </div>
+      <span class="sidebar-xp-text"><span id="sidebarXp">200</span> / 1000 XP</span>
+    </div>
+
+    <!-- Nav -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard',this)">
+        <i class="fa fa-th-large"></i><span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-page="home" onclick="navigateTo('home',this)">
+        <i class="fa fa-home"></i><span>Home</span>
+      </a>
+
+      <div class="nav-section-label">Life</div>
+      <a class="nav-item" data-page="tasks" onclick="navigateTo('tasks',this)">
+        <i class="fa fa-check-square"></i><span>Tasks</span>
+        <span class="nav-badge" id="taskBadge">0</span>
+      </a>
+      <a class="nav-item" data-page="habits" onclick="navigateTo('habits',this)">
+        <i class="fa fa-fire"></i><span>Habits</span>
+      </a>
+      <a class="nav-item" data-page="calendar" onclick="navigateTo('calendar',this)">
+        <i class="fa fa-calendar-alt"></i><span>Calendar</span>
+      </a>
+      <a class="nav-item" data-page="notes" onclick="navigateTo('notes',this)">
+        <i class="fa fa-sticky-note"></i><span>Notes</span>
+      </a>
+
+      <div class="nav-section-label">Health</div>
+      <a class="nav-item" data-page="health" onclick="navigateTo('health',this)">
+        <i class="fa fa-heartbeat"></i><span>Health</span>
+      </a>
+      <a class="nav-item" data-page="workout" onclick="navigateTo('workout',this)">
+        <i class="fa fa-dumbbell"></i><span>Workout</span>
+      </a>
+      <a class="nav-item" data-page="diet" onclick="navigateTo('diet',this)">
+        <i class="fa fa-utensils"></i><span>Diet</span>
+      </a>
+
+      <div class="nav-section-label">Growth</div>
+      <a class="nav-item" data-page="study" onclick="navigateTo('study',this)">
+        <i class="fa fa-book"></i><span>Study</span>
+      </a>
+      <a class="nav-item" data-page="internship" onclick="navigateTo('internship',this)">
+        <i class="fa fa-briefcase"></i><span>Internship</span>
+      </a>
+      <a class="nav-item" data-page="projects" onclick="navigateTo('projects',this)">
+        <i class="fa fa-code"></i><span>Projects</span>
+      </a>
+      <a class="nav-item" data-page="roadmap" onclick="navigateTo('roadmap',this)">
+        <i class="fa fa-road"></i><span>Roadmap</span>
+      </a>
+
+      <div class="nav-section-label">Insights</div>
+      <a class="nav-item" data-page="analytics" onclick="navigateTo('analytics',this)">
+        <i class="fa fa-chart-line"></i><span>Analytics</span>
+      </a>
+      <a class="nav-item" data-page="goals" onclick="navigateTo('goals',this)">
+        <i class="fa fa-bullseye"></i><span>Goals</span>
+      </a>
+      <a class="nav-item" data-page="achievements" onclick="navigateTo('achievements',this)">
+        <i class="fa fa-trophy"></i><span>Achievements</span>
+      </a>
+      <a class="nav-item" data-page="aicoach" onclick="navigateTo('aicoach',this)">
+        <i class="fa fa-robot"></i><span>AI Coach</span>
+        <span class="nav-badge new">NEW</span>
+      </a>
+
+      <div class="nav-section-label">System</div>
+      <a class="nav-item" data-page="settings" onclick="navigateTo('settings',this)">
+        <i class="fa fa-cog"></i><span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" onclick="doLogout()">
+        <i class="fa fa-sign-out-alt"></i><span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <main class="main-content" id="mainContent">
+
+    <!-- TOP TOPBAR -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <button class="topbar-menu-btn" onclick="toggleSidebarMobile()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="topbar-breadcrumb" id="topbarBreadcrumb">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <!-- Pomodoro quick -->
+        <button class="topbar-btn" onclick="navigateTo('tasks',null)" title="Pomodoro">
+          <i class="fa fa-clock"></i>
+        </button>
+        <!-- Theme toggle -->
+        <button class="topbar-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme">
+          <i class="fa fa-moon"></i>
+        </button>
+        <!-- Notifications -->
+        <button class="topbar-btn notif-btn" onclick="toggleNotifPanel()" title="Notifications">
+          <i class="fa fa-bell"></i>
+          <span class="notif-dot" id="notifDot"></span>
+        </button>
+        <!-- Profile -->
+        <div class="topbar-profile" onclick="navigateTo('settings',null)">
+          <div class="topbar-avatar" id="topbarAvatar">S</div>
+          <span class="topbar-username" id="topbarUsername">Samir</span>
+        </div>
+      </div>
+      <!-- Notification panel -->
+      <div class="notif-panel hidden" id="notifPanel">
+        <div class="notif-panel-header">
+          <span>Notifications</span>
+          <button onclick="clearNotifs()">Clear all</button>
+        </div>
+        <div class="notif-list" id="notifList">
+          <div class="notif-empty">No notifications yet</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─────────── PAGE: DASHBOARD ─────────── -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title" id="dashGreeting">Good Morning, Samir! 🌅</h1>
+          <p class="page-sub" id="dashDate">Loading date...</p>
+        </div>
+        <div class="dash-score-pill">
+          <i class="fa fa-fire"></i>
+          <span id="streakCount">0</span> day streak
+        </div>
+      </div>
+
+      <!-- Score Cards -->
+      <div class="score-grid">
+        <div class="score-card" id="scoreDaily">
+          <div class="score-label">Today's Score</div>
+          <div class="score-circle-wrap">
+            <svg viewBox="0 0 80 80" class="score-svg">
+              <circle cx="40" cy="40" r="34" class="score-bg-circle"/>
+              <circle cx="40" cy="40" r="34" class="score-progress-circle" id="dailyCircle" stroke-dasharray="0 213"/>
+            </svg>
+            <div class="score-num" id="dailyScore">0%</div>
+          </div>
+          <div class="score-detail" id="dailyDetail">0/0 tasks</div>
+        </div>
+        <div class="score-card" id="scoreWeekly">
+          <div class="score-label">This Week</div>
+          <div class="score-circle-wrap">
+            <svg viewBox="0 0 80 80" class="score-svg">
+              <circle cx="40" cy="40" r="34" class="score-bg-circle"/>
+              <circle cx="40" cy="40" r="34" class="score-progress-circle" id="weeklyCircle" stroke-dasharray="0 213" style="stroke:#a78bfa"/>
+            </svg>
+            <div class="score-num" id="weeklyScore">0%</div>
+          </div>
+          <div class="score-detail">Weekly avg</div>
+        </div>
+        <div class="score-card" id="scoreMonthly">
+          <div class="score-label">This Month</div>
+          <div class="score-circle-wrap">
+            <svg viewBox="0 0 80 80" class="score-svg">
+              <circle cx="40" cy="40" r="34" class="score-bg-circle"/>
+              <circle cx="40" cy="40" r="34" class="score-progress-circle" id="monthlyCircle" stroke-dasharray="0 213" style="stroke:#34d399"/>
+            </svg>
+            <div class="score-num" id="monthlyScore">0%</div>
+          </div>
+          <div class="score-detail">Monthly avg</div>
+        </div>
+        <div class="score-card" id="scoreXP">
+          <div class="score-label">XP &amp; Level</div>
+          <div class="score-circle-wrap">
+            <svg viewBox="0 0 80 80" class="score-svg">
+              <circle cx="40" cy="40" r="34" class="score-bg-circle"/>
+              <circle cx="40" cy="40" r="34" class="score-progress-circle" id="xpCircle" stroke-dasharray="0 213" style="stroke:#fbbf24"/>
+            </svg>
+            <div class="score-num" id="xpScore">Lv.1</div>
+          </div>
+          <div class="score-detail" id="xpDetail">200 / 1000 XP</div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Row -->
+      <div class="quick-stats">
+        <div class="qs-item">
+          <i class="fa fa-check-circle"></i>
+          <div><span id="qsTasksDone">0</span><small>Tasks Done</small></div>
+        </div>
+        <div class="qs-item">
+          <i class="fa fa-fire" style="color:#f97316"></i>
+          <div><span id="qsHabits">0</span><small>Habits Done</small></div>
+        </div>
+        <div class="qs-item">
+          <i class="fa fa-tint" style="color:#38bdf8"></i>
+          <div><span id="qsWater">0</span><small>Glasses Water</small></div>
+        </div>
+        <div class="qs-item">
+          <i class="fa fa-bed" style="color:#a78bfa"></i>
+          <div><span id="qsSleep">0h</span><small>Sleep</small></div>
+        </div>
+        <div class="qs-item">
+          <i class="fa fa-code" style="color:#34d399"></i>
+          <div><span id="qsCoding">0h</span><small>Coding</small></div>
+        </div>
+        <div class="qs-item">
+          <i class="fa fa-dumbbell" style="color:#fbbf24"></i>
+          <div><span id="qsWorkout">No</span><small>Workout</small></div>
+        </div>
+      </div>
+
+      <!-- Today's Tasks + Quote Row -->
+      <div class="dash-grid-2">
+        <!-- Today's Tasks -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa fa-tasks"></i> Today's Tasks</h3>
+            <button class="card-btn" onclick="navigateTo('tasks',null)">View All</button>
+          </div>
+          <div id="dashTodayTasks" class="dash-task-list">
+            <div class="empty-state"><i class="fa fa-check-circle"></i><p>No tasks yet — add from Tasks page!</p></div>
+          </div>
+          <button class="btn-add-quick" onclick="navigateTo('tasks',null)">
+            <i class="fa fa-plus"></i> Add Task
+          </button>
+        </div>
+
+        <!-- Quote + AI Tip -->
+        <div class="dash-right-col">
+          <div class="glass-card quote-card">
+            <div class="quote-icon">"</div>
+            <p class="quote-text" id="dashQuote">Loading motivational quote...</p>
+            <span class="quote-author" id="dashQuoteAuthor">— Ascend OS</span>
+          </div>
+          <div class="glass-card tip-card">
+            <div class="card-header">
+              <h3><i class="fa fa-robot"></i> AI Coach Tip</h3>
+              <button class="card-btn" onclick="refreshTip()">Refresh</button>
+            </div>
+            <p class="tip-text" id="dashTip">Loading your daily tip...</p>
+          </div>
+          <div class="glass-card weather-card">
+            <div class="weather-icon"><i class="fa fa-sun"></i></div>
+            <div class="weather-info">
+              <div class="weather-temp" id="weatherTemp">28°C</div>
+              <div class="weather-desc">Good day to be productive!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Habit Quick View -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header">
+          <h3><i class="fa fa-fire"></i> Today's Habits</h3>
+          <button class="card-btn" onclick="navigateTo('habits',null)">Manage</button>
+        </div>
+        <div class="habit-quick-grid" id="dashHabitsGrid"></div>
+      </div>
+
+      <!-- Weekly Chart -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header">
+          <h3><i class="fa fa-chart-bar"></i> Weekly Overview</h3>
+        </div>
+        <canvas id="weeklyChart" height="120"></canvas>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: HOME ─────────── -->
+    <section class="page hidden" id="page-home">
+      <!-- Full-screen video hero -->
+      <div class="home-hero">
+        <video class="home-video" id="homeVideo" autoplay muted loop playsinline>
+          <source src="videomotivation.mp4" type="video/mp4"/>
+        </video>
+        <div class="home-video-overlay"></div>
+        <div class="home-hero-content">
+          <div class="home-greeting" id="homeGreeting">Good Morning, Samir! 🌅</div>
+          <h1 class="home-tagline">Every day is a chance<br/>to <span class="accent">Ascend</span></h1>
+          <p class="home-subtext" id="homeGoal">Loading your goal for today...</p>
+          <div class="home-cta-row">
+            <button class="btn-home-cta" onclick="navigateTo('dashboard',null)">
+              <i class="fa fa-th-large"></i> Go to Dashboard
+            </button>
+            <button class="btn-home-cta outline" onclick="navigateTo('tasks',null)">
+              <i class="fa fa-tasks"></i> Today's Tasks
+            </button>
+          </div>
+        </div>
+        <div class="home-scroll-hint"><i class="fa fa-chevron-down"></i></div>
+      </div>
+
+      <!-- Below hero -->
+      <div class="home-below">
+        <div class="home-stats-row">
+          <div class="home-stat-card">
+            <i class="fa fa-fire"></i>
+            <span id="homeStreak">0</span>
+            <small>Day Streak</small>
+          </div>
+          <div class="home-stat-card">
+            <i class="fa fa-star"></i>
+            <span id="homeXP">200</span>
+            <small>Total XP</small>
+          </div>
+          <div class="home-stat-card">
+            <i class="fa fa-check-circle"></i>
+            <span id="homeTasksDone">0</span>
+            <small>Tasks Done</small>
+          </div>
+          <div class="home-stat-card">
+            <i class="fa fa-trophy"></i>
+            <span id="homeBadges">0</span>
+            <small>Badges</small>
+          </div>
+        </div>
+
+        <div class="home-quote-big">
+          <blockquote id="homeQuoteBig">"Push yourself, because no one else is going to do it for you."</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: TASKS ─────────── -->
+    <section class="page hidden" id="page-tasks">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Task Manager</h1>
+          <p class="page-sub">Drag, prioritize, and conquer your day</p>
+        </div>
+        <button class="btn-primary" onclick="openTaskModal()">
+          <i class="fa fa-plus"></i> Add Task
+        </button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterTasks('all',this)">All</button>
+        <button class="filter-btn" onclick="filterTasks('today',this)">Today</button>
+        <button class="filter-btn" onclick="filterTasks('pending',this)">Pending</button>
+        <button class="filter-btn" onclick="filterTasks('done',this)">Done</button>
+        <button class="filter-btn" onclick="filterTasks('high',this)">🔴 High</button>
+        <button class="filter-btn" onclick="filterTasks('medium',this)">🟡 Medium</button>
+        <button class="filter-btn" onclick="filterTasks('low',this)">🟢 Low</button>
+        <div class="filter-search">
+          <i class="fa fa-search"></i>
+          <input type="text" id="taskSearchInput" placeholder="Search tasks..." oninput="searchTasks(this.value)"/>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="task-progress-wrap">
+        <div class="task-progress-info">
+          <span>Daily Progress</span>
+          <span id="taskProgressText">0 / 0 completed</span>
+        </div>
+        <div class="task-progress-bar">
+          <div class="task-progress-fill" id="taskProgressFill" style="width:0%"></div>
+        </div>
+        <span id="taskProgressPct">0%</span>
+      </div>
+
+      <!-- Pomodoro Timer -->
+      <div class="glass-card pomodoro-card">
+        <div class="card-header">
+          <h3><i class="fa fa-clock"></i> Pomodoro Timer</h3>
+          <div class="pomo-mode-btns">
+            <button class="pomo-mode active" onclick="setPomoMode(25,this)">25 min</button>
+            <button class="pomo-mode" onclick="setPomoMode(50,this)">50 min</button>
+            <button class="pomo-mode" onclick="setPomoMode(90,this)">90 min</button>
+            <button class="pomo-mode" onclick="setPomoMode('custom',this)">Custom</button>
+          </div>
+        </div>
+        <div class="pomo-display">
+          <div class="pomo-ring">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" class="pomo-bg-circle"/>
+              <circle cx="60" cy="60" r="52" class="pomo-progress-circle" id="pomoCircle" stroke-dasharray="0 327"/>
+            </svg>
+            <div class="pomo-time" id="pomoTime">25:00</div>
+          </div>
+          <div class="pomo-controls">
+            <button class="pomo-btn" onclick="togglePomo()"><i class="fa fa-play" id="pomoPlayIcon"></i></button>
+            <button class="pomo-btn secondary" onclick="resetPomo()"><i class="fa fa-redo"></i></button>
+          </div>
+          <div class="pomo-session-info">Session <span id="pomoSession">1</span> of 4</div>
+        </div>
+        <div id="pomoCustomWrap" class="pomo-custom hidden">
+          <input type="number" id="pomoCustomMin" placeholder="Minutes" min="1" max="240"/>
+          <button onclick="applyCustomPomo()">Set</button>
+        </div>
+      </div>
+
+      <!-- Task Lists: columns by status -->
+      <div class="task-columns">
+        <div class="task-col" id="colPending">
+          <div class="task-col-header">
+            <span class="col-dot pending"></span> Pending
+            <span class="col-count" id="pendingCount">0</span>
+          </div>
+          <div class="task-list" id="taskListPending" ondragover="allowDrop(event)" ondrop="dropTask(event,'pending')"></div>
+        </div>
+        <div class="task-col" id="colDone">
+          <div class="task-col-header">
+            <span class="col-dot done"></span> Done
+            <span class="col-count" id="doneCount">0</span>
+          </div>
+          <div class="task-list" id="taskListDone" ondragover="allowDrop(event)" ondrop="dropTask(event,'done')"></div>
+        </div>
+        <div class="task-col" id="colSkipped">
+          <div class="task-col-header">
+            <span class="col-dot skipped"></span> Skipped
+            <span class="col-count" id="skippedCount">0</span>
+          </div>
+          <div class="task-list" id="taskListSkipped" ondragover="allowDrop(event)" ondrop="dropTask(event,'skipped')"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: HABITS ─────────── -->
+    <section class="page hidden" id="page-habits">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Habit Tracker</h1>
+          <p class="page-sub">Build consistency, one day at a time</p>
+        </div>
+        <button class="btn-primary" onclick="openHabitModal()">
+          <i class="fa fa-plus"></i> Add Habit
+        </button>
+      </div>
+
+      <!-- Today's date banner -->
+      <div class="habit-date-banner">
+        <i class="fa fa-calendar-day"></i>
+        <span id="habitTodayDate">Today</span>
+        <span class="habit-overall-pct" id="habitOverallPct">0% Complete</span>
+      </div>
+
+      <!-- Habit grid -->
+      <div class="habits-grid" id="habitsGrid"></div>
+
+      <!-- Habit Heatmap -->
+      <div class="glass-card" style="margin-top:24px">
+        <div class="card-header">
+          <h3><i class="fa fa-th"></i> Habit Heatmap (Last 30 Days)</h3>
+        </div>
+        <div class="habit-heatmap" id="habitHeatmap"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: HEALTH ─────────── -->
+    <section class="page hidden" id="page-health">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Health Tracker</h1>
+          <p class="page-sub">Monitor your body, fuel your growth</p>
+        </div>
+        <button class="btn-primary" onclick="saveHealthData()">
+          <i class="fa fa-save"></i> Save Today
+        </button>
+      </div>
+
+      <div class="health-grid">
+        <!-- Weight + BMI -->
+        <div class="glass-card">
+          <div class="card-header"><h3><i class="fa fa-weight"></i> Weight & BMI</h3></div>
+          <div class="health-inputs">
+            <div class="form-group">
+              <label>Weight (kg)</label>
+              <input type="number" id="healthWeight" placeholder="70" step="0.1"/>
+            </div>
+            <div class="form-group">
+              <label>Height (cm)</label>
+              <input type="number" id="healthHeight" placeholder="175"/>
+            </div>
+          </div>
+          <div class="bmi-result" id="bmiResult">
+            <div class="bmi-num" id="bmiNum">—</div>
+            <div class="bmi-label" id="bmiLabel">Enter weight & height</div>
+          </div>
+          <button class="btn-secondary" onclick="calcBMI()">Calculate BMI</button>
+          <canvas id="weightChart" height="100" style="margin-top:16px"></canvas>
+        </div>
+
+        <!-- Water -->
+        <div class="glass-card">
+          <div class="card-header"><h3><i class="fa fa-tint"></i> Water Intake</h3></div>
+          <div class="water-tracker">
+            <div class="water-glasses" id="waterGlasses"></div>
+            <div class="water-info">
+              <span id="waterCount">0</span> / <span id="waterGoal">8</span> glasses
+            </div>
+            <div class="water-controls">
+              <button class="btn-secondary" onclick="addWater()"><i class="fa fa-plus"></i> Add Glass</button>
+              <button class="btn-secondary" onclick="removeWater()"><i class="fa fa-minus"></i></button>
+            </div>
+            <div class="form-group" style="margin-top:12px">
+              <label>Daily Goal (glasses)</label>
+              <input type="number" id="waterGoalInput" value="8" min="1" max="20" onchange="setWaterGoal(this.value)"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleep -->
+        <div class="glass-card">
+          <div class="card-header"><h3><i class="fa fa-bed"></i> Sleep Tracker</h3></div>
+          <div class="health-inputs">
+            <div class="form-group">
+              <label>Bedtime</label>
+              <input type="time" id="sleepBed" value="23:00"/>
+            </div>
+            <div class="form-group">
+              <label>Wake Time</label>
+              <input type="time" id="sleepWake" value="07:00"/>
+            </div>
+          </div>
+          <div class="sleep-result" id="sleepResult">Hours: —</div>
+          <button class="btn-secondary" onclick="calcSleep()">Log Sleep</button>
+          <canvas id="sleepChart" height="100" style="margin-top:16px"></canvas>
+        </div>
+
+        <!-- Protein & Calories quick -->
+        <div class="glass-card">
+          <div class="card-header"><h3><i class="fa fa-drumstick-bite"></i> Nutrition Quick</h3></div>
+          <div class="health-inputs">
+            <div class="form-group">
+              <label>Protein (g)</label>
+              <input type="number" id="healthProtein" placeholder="150"/>
+            </div>
+            <div class="form-group">
+              <label>Calories (kcal)</label>
+              <input type="number" id="healthCalories" placeholder="2200"/>
+            </div>
+          </div>
+          <div class="nutrition-bars">
+            <div class="nutr-bar-row">
+              <span>Protein</span>
+              <div class="nutr-bar"><div class="nutr-fill protein" id="proteinFill"></div></div>
+              <span id="proteinPct">0%</span>
+            </div>
+            <div class="nutr-bar-row">
+              <span>Calories</span>
+              <div class="nutr-bar"><div class="nutr-fill calories" id="caloriesFill"></div></div>
+              <span id="caloriesPct">0%</span>
+            </div>
+          </div>
+          <button class="btn-secondary" onclick="saveNutrition()">Save</button>
+        </div>
+
+        <!-- Body Measurements -->
+        <div class="glass-card">
+          <div class="card-header"><h3><i class="fa fa-ruler"></i> Measurements</h3></div>
+          <div class="health-inputs">
+            <div class="form-group"><label>Chest (cm)</label><input type="number" id="mChest" placeholder="95"/></div>
+            <div class="form-group"><label>Waist (cm)</label><input type="number" id="mWaist" placeholder="80"/></div>
+            <div class="form-group"><label>Hips (cm)</label><input type="number" id="mHips" placeholder="95"/></div>
+            <div class="form-group"><label>Arms (cm)</label><input type="number" id="mArms" placeholder="35"/></div>
+          </div>
+          <button class="btn-secondary" onclick="saveMeasurements()">Save Measurements</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: WORKOUT ─────────── -->
+    <section class="page hidden" id="page-workout">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Workout Tracker</h1>
+          <p class="page-sub">Log exercises, track progress</p>
+        </div>
+        <button class="btn-primary" onclick="openWorkoutModal()">
+          <i class="fa fa-plus"></i> Log Workout
+        </button>
+      </div>
+
+      <!-- Today's workout status -->
+      <div class="workout-status-card glass-card">
+        <div class="ws-info">
+          <div class="ws-icon"><i class="fa fa-dumbbell"></i></div>
+          <div>
+            <div class="ws-title" id="workoutStatusTitle">No workout logged today</div>
+            <div class="ws-sub" id="workoutStatusSub">Start your session!</div>
+          </div>
+        </div>
+        <button class="btn-secondary" id="workoutToggleBtn" onclick="toggleWorkoutDone()">Mark as Done</button>
+      </div>
+
+      <!-- Exercise Log -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header">
+          <h3><i class="fa fa-list"></i> Exercise Log</h3>
+          <button class="card-btn" onclick="openWorkoutModal()">Add Exercise</button>
+        </div>
+        <div class="exercise-list" id="exerciseList">
+          <div class="empty-state"><i class="fa fa-dumbbell"></i><p>No exercises logged today</p></div>
+        </div>
+      </div>
+
+      <!-- Preset Routines -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-bolt"></i> Quick Routines</h3></div>
+        <div class="routine-grid">
+          <div class="routine-card" onclick="loadRoutine('push')">
+            <i class="fa fa-arrow-up"></i><span>Push Day</span>
+            <small>Chest, Shoulders, Triceps</small>
+          </div>
+          <div class="routine-card" onclick="loadRoutine('pull')">
+            <i class="fa fa-arrow-down"></i><span>Pull Day</span>
+            <small>Back, Biceps</small>
+          </div>
+          <div class="routine-card" onclick="loadRoutine('legs')">
+            <i class="fa fa-running"></i><span>Leg Day</span>
+            <small>Quads, Hamstrings, Calves</small>
+          </div>
+          <div class="routine-card" onclick="loadRoutine('cardio')">
+            <i class="fa fa-heartbeat"></i><span>Cardio</span>
+            <small>Running, Cycling, HIIT</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workout History -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-history"></i> Workout History</h3></div>
+        <canvas id="workoutChart" height="120"></canvas>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: DIET ─────────── -->
+    <section class="page hidden" id="page-diet">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Diet Tracker</h1>
+          <p class="page-sub">Track meals, macros, and calories</p>
+        </div>
+        <button class="btn-primary" onclick="openMealModal()"><i class="fa fa-plus"></i> Add Meal</button>
+      </div>
+
+      <!-- Macro Summary -->
+      <div class="macro-summary">
+        <div class="macro-card calories-card">
+          <div class="macro-icon"><i class="fa fa-fire"></i></div>
+          <div class="macro-info">
+            <div class="macro-val" id="totalCalories">0</div>
+            <div class="macro-label">kcal / <span id="calGoal">2200</span></div>
+          </div>
+          <div class="macro-progress-ring">
+            <svg viewBox="0 0 60 60">
+              <circle cx="30" cy="30" r="24" class="macro-bg"/>
+              <circle cx="30" cy="30" r="24" class="macro-fill cal-fill" id="calCircle" stroke-dasharray="0 151"/>
+            </svg>
+          </div>
+        </div>
+        <div class="macro-card protein-card">
+          <div class="macro-icon"><i class="fa fa-drumstick-bite"></i></div>
+          <div class="macro-info">
+            <div class="macro-val" id="totalProtein">0g</div>
+            <div class="macro-label">Protein / <span id="protGoal">150</span>g</div>
+          </div>
+        </div>
+        <div class="macro-card carb-card">
+          <div class="macro-icon"><i class="fa fa-bread-slice"></i></div>
+          <div class="macro-info">
+            <div class="macro-val" id="totalCarbs">0g</div>
+            <div class="macro-label">Carbs / <span id="carbGoal">250</span>g</div>
+          </div>
+        </div>
+        <div class="macro-card fat-card">
+          <div class="macro-icon"><i class="fa fa-cheese"></i></div>
+          <div class="macro-info">
+            <div class="macro-val" id="totalFat">0g</div>
+            <div class="macro-label">Fat / <span id="fatGoal">70</span>g</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meals -->
+      <div class="meals-grid">
+        <div class="glass-card meal-section" id="mealBreakfast">
+          <div class="meal-header"><i class="fa fa-coffee"></i><h3>Breakfast</h3><span class="meal-cal" id="calBreakfast">0 kcal</span></div>
+          <div class="meal-items" id="itemsBreakfast"></div>
+          <button class="btn-add-meal" onclick="openMealModal('breakfast')"><i class="fa fa-plus"></i> Add Item</button>
+        </div>
+        <div class="glass-card meal-section" id="mealLunch">
+          <div class="meal-header"><i class="fa fa-sun"></i><h3>Lunch</h3><span class="meal-cal" id="calLunch">0 kcal</span></div>
+          <div class="meal-items" id="itemsLunch"></div>
+          <button class="btn-add-meal" onclick="openMealModal('lunch')"><i class="fa fa-plus"></i> Add Item</button>
+        </div>
+        <div class="glass-card meal-section" id="mealDinner">
+          <div class="meal-header"><i class="fa fa-moon"></i><h3>Dinner</h3><span class="meal-cal" id="calDinner">0 kcal</span></div>
+          <div class="meal-items" id="itemsDinner"></div>
+          <button class="btn-add-meal" onclick="openMealModal('dinner')"><i class="fa fa-plus"></i> Add Item</button>
+        </div>
+        <div class="glass-card meal-section" id="mealSnack">
+          <div class="meal-header"><i class="fa fa-cookie"></i><h3>Snacks</h3><span class="meal-cal" id="calSnack">0 kcal</span></div>
+          <div class="meal-items" id="itemsSnack"></div>
+          <button class="btn-add-meal" onclick="openMealModal('snack')"><i class="fa fa-plus"></i> Add Item</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: STUDY ─────────── -->
+    <section class="page hidden" id="page-study">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Study Planner</h1>
+          <p class="page-sub">Semester, subjects, assignments, revision</p>
+        </div>
+        <button class="btn-primary" onclick="openSubjectModal()"><i class="fa fa-plus"></i> Add Subject</button>
+      </div>
+
+      <!-- Study stats -->
+      <div class="study-stats-row">
+        <div class="study-stat"><i class="fa fa-clock"></i><span id="studyHoursToday">0h</span><small>Today</small></div>
+        <div class="study-stat"><i class="fa fa-book-open"></i><span id="studySubjects">0</span><small>Subjects</small></div>
+        <div class="study-stat"><i class="fa fa-tasks"></i><span id="studyAssignments">0</span><small>Assignments</small></div>
+        <div class="study-stat"><i class="fa fa-percent"></i><span id="studyAttendance">0%</span><small>Attendance</small></div>
+      </div>
+
+      <!-- Subjects -->
+      <div class="glass-card">
+        <div class="card-header"><h3><i class="fa fa-book"></i> Subjects</h3></div>
+        <div class="subjects-list" id="subjectsList">
+          <div class="empty-state"><i class="fa fa-book"></i><p>Add your subjects to get started</p></div>
+        </div>
+      </div>
+
+      <!-- Assignments -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header">
+          <h3><i class="fa fa-file-alt"></i> Assignments</h3>
+          <button class="card-btn" onclick="openAssignmentModal()">Add</button>
+        </div>
+        <div class="assignment-list" id="assignmentList">
+          <div class="empty-state"><i class="fa fa-file-alt"></i><p>No assignments yet</p></div>
+        </div>
+      </div>
+
+      <!-- Study Log -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header">
+          <h3><i class="fa fa-stopwatch"></i> Study Session</h3>
+        </div>
+        <div class="study-session-controls">
+          <select id="studySubjectSelect">
+            <option value="">Select Subject</option>
+          </select>
+          <button class="btn-primary" onclick="startStudySession()"><i class="fa fa-play"></i> Start</button>
+          <button class="btn-secondary" onclick="stopStudySession()"><i class="fa fa-stop"></i> Stop</button>
+          <div class="study-timer-display" id="studyTimerDisplay">00:00:00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: INTERNSHIP ─────────── -->
+    <section class="page hidden" id="page-internship">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Internship — AtomProd</h1>
+          <p class="page-sub">Track tasks, progress, and certificates</p>
+        </div>
+        <button class="btn-primary" onclick="openInternshipTaskModal()"><i class="fa fa-plus"></i> Add Task</button>
+      </div>
+
+      <!-- Internship Overview -->
+      <div class="internship-overview glass-card">
+        <div class="intern-stat"><span class="intern-stat-val" id="internDone">0</span><span>Completed</span></div>
+        <div class="intern-stat"><span class="intern-stat-val" id="internPending">0</span><span>Pending</span></div>
+        <div class="intern-stat"><span class="intern-stat-val" id="internPct">0%</span><span>Progress</span></div>
+        <div class="intern-progress-bar-wrap">
+          <div class="intern-progress-bar"><div class="intern-progress-fill" id="internProgressFill"></div></div>
+        </div>
+      </div>
+
+      <!-- Task list -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-tasks"></i> Internship Tasks</h3></div>
+        <div class="internship-task-list" id="internshipTaskList">
+          <div class="empty-state"><i class="fa fa-briefcase"></i><p>Add your internship tasks</p></div>
+        </div>
+      </div>
+
+      <!-- Frontend Roadmap -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-road"></i> Frontend Roadmap</h3></div>
+        <div class="roadmap-list" id="internRoadmapList">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Certificates -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header">
+          <h3><i class="fa fa-certificate"></i> Certificates</h3>
+          <button class="card-btn" onclick="openCertModal()">Add</button>
+        </div>
+        <div class="cert-grid" id="certGrid">
+          <div class="empty-state"><i class="fa fa-certificate"></i><p>Add your certificates</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: PROJECTS ─────────── -->
+    <section class="page hidden" id="page-projects">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Projects</h1>
+          <p class="page-sub">Track your builds from idea to launch</p>
+        </div>
+        <button class="btn-primary" onclick="openProjectModal()"><i class="fa fa-plus"></i> New Project</button>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+        <div class="empty-state"><i class="fa fa-code"></i><p>Add your first project!</p></div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: ROADMAP ─────────── -->
+    <section class="page hidden" id="page-roadmap">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Learning Roadmap</h1>
+          <p class="page-sub">Frontend → Backend → Fullstack</p>
+        </div>
+      </div>
+
+      <div class="roadmap-sections">
+        <!-- HTML -->
+        <div class="roadmap-phase glass-card">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-icon html"><i class="fab fa-html5"></i></div>
+            <div>
+              <h3>HTML</h3>
+              <div class="roadmap-phase-progress-bar"><div id="htmlProgress" class="roadmap-phase-fill" style="width:0%"></div></div>
+            </div>
+            <span class="roadmap-pct" id="htmlPct">0%</span>
+          </div>
+          <div class="roadmap-items" id="roadmapHTML"></div>
+        </div>
+        <!-- CSS -->
+        <div class="roadmap-phase glass-card">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-icon css"><i class="fab fa-css3-alt"></i></div>
+            <div>
+              <h3>CSS</h3>
+              <div class="roadmap-phase-progress-bar"><div id="cssProgress" class="roadmap-phase-fill" style="width:0%;background:#38bdf8"></div></div>
+            </div>
+            <span class="roadmap-pct" id="cssPct">0%</span>
+          </div>
+          <div class="roadmap-items" id="roadmapCSS"></div>
+        </div>
+        <!-- JavaScript -->
+        <div class="roadmap-phase glass-card">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-icon js"><i class="fab fa-js"></i></div>
+            <div>
+              <h3>JavaScript</h3>
+              <div class="roadmap-phase-progress-bar"><div id="jsProgress" class="roadmap-phase-fill" style="width:0%;background:#fbbf24"></div></div>
+            </div>
+            <span class="roadmap-pct" id="jsPct">0%</span>
+          </div>
+          <div class="roadmap-items" id="roadmapJS"></div>
+        </div>
+        <!-- React -->
+        <div class="roadmap-phase glass-card">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-icon react"><i class="fab fa-react"></i></div>
+            <div>
+              <h3>React</h3>
+              <div class="roadmap-phase-progress-bar"><div id="reactProgress" class="roadmap-phase-fill" style="width:0%;background:#67e8f9"></div></div>
+            </div>
+            <span class="roadmap-pct" id="reactPct">0%</span>
+          </div>
+          <div class="roadmap-items" id="roadmapReact"></div>
+        </div>
+        <!-- Backend -->
+        <div class="roadmap-phase glass-card">
+          <div class="roadmap-phase-header">
+            <div class="roadmap-phase-icon backend"><i class="fa fa-server"></i></div>
+            <div>
+              <h3>Backend</h3>
+              <div class="roadmap-phase-progress-bar"><div id="backendProgress" class="roadmap-phase-fill" style="width:0%;background:#a78bfa"></div></div>
+            </div>
+            <span class="roadmap-pct" id="backendPct">0%</span>
+          </div>
+          <div class="roadmap-items" id="roadmapBackend"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: NOTES ─────────── -->
+    <section class="page hidden" id="page-notes">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Notes</h1>
+          <p class="page-sub">Rich text, code blocks, everything</p>
+        </div>
+        <button class="btn-primary" onclick="openNoteModal()"><i class="fa fa-plus"></i> New Note</button>
+      </div>
+
+      <div class="notes-layout">
+        <div class="notes-sidebar-panel">
+          <input class="notes-search" type="text" placeholder="Search notes..." oninput="searchNotes(this.value)"/>
+          <div class="notes-list" id="notesList">
+            <div class="empty-state"><i class="fa fa-sticky-note"></i><p>No notes yet</p></div>
+          </div>
+        </div>
+        <div class="note-editor-panel" id="noteEditorPanel">
+          <div class="note-editor-placeholder">
+            <i class="fa fa-sticky-note"></i>
+            <p>Select a note or create a new one</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: CALENDAR ─────────── -->
+    <section class="page hidden" id="page-calendar">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Calendar</h1>
+          <p class="page-sub">View events, deadlines, and schedules</p>
+        </div>
+        <button class="btn-primary" onclick="openEventModal()"><i class="fa fa-plus"></i> Add Event</button>
+      </div>
+
+      <div class="calendar-layout">
+        <div class="glass-card calendar-main">
+          <div class="calendar-nav">
+            <button onclick="prevMonth()"><i class="fa fa-chevron-left"></i></button>
+            <h3 id="calMonthYear">June 2026</h3>
+            <button onclick="nextMonth()"><i class="fa fa-chevron-right"></i></button>
+          </div>
+          <div class="calendar-weekdays">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+            <span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+        <div class="glass-card calendar-events-panel">
+          <h3 id="calSelectedDate">Select a date</h3>
+          <div class="calendar-events-list" id="calEventsList">
+            <div class="empty-state"><i class="fa fa-calendar"></i><p>No events on this date</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: ANALYTICS ─────────── -->
+    <section class="page hidden" id="page-analytics">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Analytics</h1>
+          <p class="page-sub">Deep insights into your growth</p>
+        </div>
+        <button class="btn-primary" onclick="exportReport('pdf')"><i class="fa fa-download"></i> Export PDF</button>
+      </div>
+
+      <!-- Stat summary cards -->
+      <div class="analytics-summary">
+        <div class="analytics-card">
+          <div class="ac-icon tasks"><i class="fa fa-check-circle"></i></div>
+          <div class="ac-info">
+            <div class="ac-val" id="anaTotalTasks">0</div>
+            <div class="ac-label">Total Tasks Done</div>
+          </div>
+        </div>
+        <div class="analytics-card">
+          <div class="ac-icon habits"><i class="fa fa-fire"></i></div>
+          <div class="ac-info">
+            <div class="ac-val" id="anaTotalHabits">0</div>
+            <div class="ac-label">Habit Completions</div>
+          </div>
+        </div>
+        <div class="analytics-card">
+          <div class="ac-icon study"><i class="fa fa-book"></i></div>
+          <div class="ac-info">
+            <div class="ac-val" id="anaStudyHours">0h</div>
+            <div class="ac-label">Study Hours</div>
+          </div>
+        </div>
+        <div class="analytics-card">
+          <div class="ac-icon workout"><i class="fa fa-dumbbell"></i></div>
+          <div class="ac-info">
+            <div class="ac-val" id="anaWorkoutDays">0</div>
+            <div class="ac-label">Workout Days</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="analytics-charts-grid">
+        <div class="glass-card">
+          <div class="card-header"><h3>Task Completion (7 Days)</h3></div>
+          <canvas id="anaTaskChart" height="160"></canvas>
+        </div>
+        <div class="glass-card">
+          <div class="card-header"><h3>Habit Performance</h3></div>
+          <canvas id="anaHabitChart" height="160"></canvas>
+        </div>
+        <div class="glass-card">
+          <div class="card-header"><h3>Study vs Coding Hours</h3></div>
+          <canvas id="anaStudyChart" height="160"></canvas>
+        </div>
+        <div class="glass-card">
+          <div class="card-header"><h3>Health Overview</h3></div>
+          <canvas id="anaHealthChart" height="160"></canvas>
+        </div>
+        <div class="glass-card span-2">
+          <div class="card-header"><h3>Monthly Progress Line</h3></div>
+          <canvas id="anaMonthChart" height="140"></canvas>
+        </div>
+        <div class="glass-card">
+          <div class="card-header"><h3>Score Breakdown (Pie)</h3></div>
+          <canvas id="anaPieChart" height="160"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: GOALS ─────────── -->
+    <section class="page hidden" id="page-goals">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Goals</h1>
+          <p class="page-sub">Set targets, track milestones, achieve more</p>
+        </div>
+        <button class="btn-primary" onclick="openGoalModal()"><i class="fa fa-plus"></i> New Goal</button>
+      </div>
+      <div class="goals-grid" id="goalsGrid">
+        <div class="empty-state"><i class="fa fa-bullseye"></i><p>Set your first goal!</p></div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: ACHIEVEMENTS ─────────── -->
+    <section class="page hidden" id="page-achievements">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Achievements</h1>
+          <p class="page-sub">Badges, XP, levels, and streaks</p>
+        </div>
+      </div>
+
+      <!-- XP & Level Card -->
+      <div class="glass-card level-card">
+        <div class="level-info">
+          <div class="level-badge" id="achieveLevelBadge">1</div>
+          <div>
+            <div class="level-title" id="achieveLevelTitle">Level 1 — Beginner</div>
+            <div class="level-xp-bar">
+              <div class="level-xp-fill" id="achieveXpFill" style="width:20%"></div>
+            </div>
+            <div class="level-xp-text"><span id="achieveXp">200</span> / <span id="achieveNextXp">1000</span> XP to next level</div>
+          </div>
+        </div>
+        <div class="level-coins"><i class="fa fa-coins"></i> <span id="achieveCoins">0</span> coins</div>
+      </div>
+
+      <!-- Streak Card -->
+      <div class="glass-card streak-card" style="margin-top:20px">
+        <div class="streak-flame"><i class="fa fa-fire"></i></div>
+        <div class="streak-info">
+          <div class="streak-num" id="achieveStreak">0</div>
+          <div class="streak-label">Day Streak</div>
+        </div>
+        <div class="streak-best">Best: <span id="achieveBestStreak">0</span> days</div>
+      </div>
+
+      <!-- Badges -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-medal"></i> Badges</h3></div>
+        <div class="badges-grid" id="badgesGrid"></div>
+      </div>
+
+      <!-- Contribution Graph (GitHub style) -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-th"></i> Activity Graph</h3></div>
+        <div class="contrib-graph" id="contribGraph"></div>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: AI COACH ─────────── -->
+    <section class="page hidden" id="page-aicoach">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">AI Coach</h1>
+          <p class="page-sub">Your personal growth advisor</p>
+        </div>
+      </div>
+
+      <!-- Daily Advice -->
+      <div class="glass-card ai-daily-card">
+        <div class="ai-daily-header">
+          <div class="ai-avatar"><i class="fa fa-robot"></i></div>
+          <div>
+            <div class="ai-greeting">Good day, Samir!</div>
+            <div class="ai-subtext">Here's your personalised advice for today</div>
+          </div>
+          <button class="card-btn" onclick="refreshAllTips()"><i class="fa fa-sync"></i> Refresh</button>
+        </div>
+        <div class="ai-tips-grid" id="aiTipsGrid"></div>
+      </div>
+
+      <!-- Chat Interface -->
+      <div class="glass-card ai-chat-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-comment-dots"></i> Chat with Coach</h3></div>
+        <div class="ai-chat-messages" id="aiChatMessages">
+          <div class="ai-msg bot">
+            <div class="ai-msg-avatar"><i class="fa fa-robot"></i></div>
+            <div class="ai-msg-text">Hey Samir! I'm your AI Coach. Ask me anything about your fitness, study, or productivity goals. How can I help you today?</div>
+          </div>
+        </div>
+        <div class="ai-chat-input-wrap">
+          <input type="text" id="aiChatInput" placeholder="Ask your AI coach..." onkeydown="if(event.key==='Enter')sendAiMessage()"/>
+          <button class="ai-send-btn" onclick="sendAiMessage()"><i class="fa fa-paper-plane"></i></button>
+        </div>
+        <div class="ai-quick-prompts">
+          <button onclick="quickPrompt('What should I focus on today?')">Today's focus?</button>
+          <button onclick="quickPrompt('How is my progress this week?')">My progress?</button>
+          <button onclick="quickPrompt('Give me a workout tip')">Workout tip</button>
+          <button onclick="quickPrompt('Motivate me!')">Motivate me!</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="glass-card" style="margin-top:20px">
+        <div class="card-header"><h3><i class="fa fa-chart-pie"></i> Your Stats Overview</h3></div>
+        <canvas id="aiStatsChart" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- ─────────── PAGE: SETTINGS ─────────── -->
+    <section class="page hidden" id="page-settings">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-sub">Personalize your Ascend OS experience</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- Profile -->
+        <div class="glass-card settings-card">
+          <h3 class="settings-section-title"><i class="fa fa-user"></i> Profile</h3>
+          <div class="profile-photo-wrap">
+            <div class="profile-photo" id="profilePhoto">S</div>
+            <button class="btn-secondary small" onclick="document.getElementById('photoUpload').click()">
+              <i class="fa fa-camera"></i> Change Photo
+            </button>
+            <input type="file" id="photoUpload" accept="image/*" hidden onchange="uploadPhoto(event)"/>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label>First Name</label><input type="text" id="settingFname" placeholder="Samir"/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" id="settingLname" placeholder="Khan"/></div>
+          </div>
+          <div class="form-group"><label>Username</label><input type="text" id="settingUser"/></div>
+          <div class="form-group"><label>Email</label><input type="email" id="settingEmail"/></div>
+          <div class="form-row-2">
+            <div class="form-group"><label>Age</label><input type="number" id="settingAge" min="1" max="100"/></div>
+            <div class="form-group"><label>Weight (kg)</label><input type="number" id="settingWeight" step="0.1"/></div>
+          </div>
+          <div class="form-group"><label>Daily Goal</label><input type="text" id="settingGoal" placeholder="e.g. Get placed in a top company"/></div>
+          <button class="btn-primary" onclick="saveProfile()"><i class="fa fa-save"></i> Save Profile</button>
+        </div>
+
+        <!-- Appearance -->
+        <div class="glass-card settings-card">
+          <h3 class="settings-section-title"><i class="fa fa-palette"></i> Appearance</h3>
+          <div class="form-group">
+            <label>Theme</label>
+            <div class="theme-toggle-row">
+              <button class="theme-btn active" id="themeBtn-dark" onclick="setTheme('dark')"><i class="fa fa-moon"></i> Dark</button>
+              <button class="theme-btn" id="themeBtn-light" onclick="setTheme('light')"><i class="fa fa-sun"></i> Light</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Accent Color</label>
+            <div class="accent-colors">
+              <div class="accent-swatch active" data-color="#6366f1" onclick="setAccent('#6366f1',this)" style="background:#6366f1"></div>
+              <div class="accent-swatch" data-color="#f97316" onclick="setAccent('#f97316',this)" style="background:#f97316"></div>
+              <div class="accent-swatch" data-color="#10b981" onclick="setAccent('#10b981',this)" style="background:#10b981"></div>
+              <div class="accent-swatch" data-color="#ef4444" onclick="setAccent('#ef4444',this)" style="background:#ef4444"></div>
+              <div class="accent-swatch" data-color="#a855f7" onclick="setAccent('#a855f7',this)" style="background:#a855f7"></div>
+              <div class="accent-swatch" data-color="#0ea5e9" onclick="setAccent('#0ea5e9',this)" style="background:#0ea5e9"></div>
+              <div class="accent-swatch" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)" style="background:#fbbf24"></div>
+              <input type="color" id="customAccentInput" value="#6366f1" onchange="setAccent(this.value,null)" title="Custom color"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Font Size</label>
+            <select id="fontSizeSelect" onchange="setFontSize(this.value)">
+              <option value="14">Small (14px)</option>
+              <option value="15" selected>Default (15px)</option>
+              <option value="16">Large (16px)</option>
+              <option value="18">Extra Large (18px)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Nutrition Goals -->
+        <div class="glass-card settings-card">
+          <h3 class="settings-section-title"><i class="fa fa-bullseye"></i> Daily Goals</h3>
+          <div class="form-row-2">
+            <div class="form-group"><label>Calorie Goal (kcal)</label><input type="number" id="goalCalories" value="2200"/></div>
+            <div class="form-group"><label>Protein Goal (g)</label><input type="number" id="goalProtein" value="150"/></div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label>Carbs Goal (g)</label><input type="number" id="goalCarbs" value="250"/></div>
+            <div class="form-group"><label>Fat Goal (g)</label><input type="number" id="goalFat" value="70"/></div>
+          </div>
+          <div class="form-group"><label>Water Goal (glasses)</label><input type="number" id="goalWater" value="8"/></div>
+          <div class="form-group"><label>Sleep Goal (hrs)</label><input type="number" id="goalSleep" value="7" step="0.5"/></div>
+          <button class="btn-primary" onclick="saveGoals()"><i class="fa fa-save"></i> Save Goals</button>
+        </div>
+
+        <!-- Data Management -->
+        <div class="glass-card settings-card">
+          <h3 class="settings-section-title"><i class="fa fa-database"></i> Data</h3>
+          <div class="data-actions">
+            <button class="btn-secondary" onclick="exportData('json')"><i class="fa fa-download"></i> Export JSON</button>
+            <button class="btn-secondary" onclick="exportData('csv')"><i class="fa fa-file-csv"></i> Export CSV</button>
+            <button class="btn-secondary" onclick="exportData('pdf')"><i class="fa fa-file-pdf"></i> Export PDF</button>
+            <label class="btn-secondary" style="cursor:pointer">
+              <i class="fa fa-upload"></i> Import JSON
+              <input type="file" accept=".json" hidden onchange="importData(event)"/>
+            </label>
+            <button class="btn-danger" onclick="confirmClearData()"><i class="fa fa-trash"></i> Clear All Data</button>
+          </div>
+          <div class="form-group" style="margin-top:16px">
+            <label>Auto-save</label>
+            <div class="toggle-row">
+              <label class="toggle-switch">
+                <input type="checkbox" id="autoSaveToggle" checked onchange="toggleAutoSave(this.checked)"/>
+                <span class="toggle-slider"></span>
+              </label>
+              <span>Auto-save every 30 seconds</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="glass-card settings-card">
+          <h3 class="settings-section-title"><i class="fa fa-lock"></i> Change Password</h3>
+          <div class="form-group"><label>Current Password</label>
+            <div class="input-icon-wrap"><i class="fa fa-lock"></i>
+              <input type="password" id="currPass" placeholder="Current password"/>
+            </div>
+          </div>
+          <div class="form-group"><label>New Password</label>
+            <div class="input-icon-wrap"><i class="fa fa-lock"></i>
+              <input type="password" id="newPass" placeholder="New password"/>
+            </div>
+          </div>
+          <div class="form-group"><label>Confirm New Password</label>
+            <div class="input-icon-wrap"><i class="fa fa-lock"></i>
+              <input type="password" id="confPass" placeholder="Confirm new password"/>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="changePassword()"><i class="fa fa-save"></i> Update Password</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- /main-content -->
+
+</div><!-- /appWrapper -->
+
+
+<!-- ████████████████████████████████████████
+     MODALS
+████████████████████████████████████████ -->
+
+<!-- Task Modal -->
+<div class="modal-overlay hidden" id="taskModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="taskModalTitle">Add Task</h3>
+      <button class="modal-close-btn" onclick="closeModal('taskModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Task Title *</label><input type="text" id="taskTitle" placeholder="Enter task title..."/></div>
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Priority</label>
+        <select id="taskPriority">
+          <option value="high">🔴 High</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="taskCategory">
+          <option>Study</option><option>Workout</option><option>Coding</option>
+          <option>Work</option><option>Personal</option><option>Health</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Deadline</label><input type="date" id="taskDeadline"/></div>
+      <div class="form-group">
+        <label>Repeat</label>
+        <select id="taskRepeat">
+          <option value="none">No Repeat</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="taskNotes" rows="2" placeholder="Add notes..."></textarea></div>
+    <div class="form-group">
+      <label>Subtasks</label>
+      <div id="subtasksList"></div>
+      <button class="btn-add-sub" onclick="addSubtask()"><i class="fa fa-plus"></i> Add Subtask</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('taskModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveTask()"><i class="fa fa-save"></i> Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Habit Modal -->
+<div class="modal-overlay hidden" id="habitModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Habit</h3>
+      <button class="modal-close-btn" onclick="closeModal('habitModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Habit Name *</label><input type="text" id="habitName" placeholder="e.g. Morning Workout"/></div>
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Icon</label>
+        <select id="habitIcon">
+          <option value="💪">💪 Workout</option><option value="💧">💧 Water</option>
+          <option value="🥩">🥩 Protein</option><option value="😴">😴 Sleep</option>
+          <option value="💻">💻 Coding</option><option value="📚">📚 Reading</option>
+          <option value="🧘">🧘 Meditation</option><option value="🗣️">🗣️ English</option>
+          <option value="🙏">🙏 Prayer</option><option value="✨">✨ Skincare</option>
+          <option value="🏃">🏃 Running</option><option value="⭐">⭐ Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Color</label>
+        <input type="color" id="habitColor" value="#6366f1"/>
+      </div>
+    </div>
+    <div class="form-group"><label>Target (times per day)</label><input type="number" id="habitTarget" value="1" min="1" max="20"/></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('habitModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveHabit()"><i class="fa fa-save"></i> Add Habit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Workout Modal -->
+<div class="modal-overlay hidden" id="workoutModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Log Exercise</h3>
+      <button class="modal-close-btn" onclick="closeModal('workoutModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Exercise Name *</label><input type="text" id="exerciseName" placeholder="e.g. Bench Press"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Sets</label><input type="number" id="exerciseSets" value="3" min="1"/></div>
+      <div class="form-group"><label>Reps</label><input type="number" id="exerciseReps" value="10" min="1"/></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Weight (kg)</label><input type="number" id="exerciseWeight" placeholder="60" step="0.5"/></div>
+      <div class="form-group"><label>Duration (min)</label><input type="number" id="exerciseDuration" placeholder="45"/></div>
+    </div>
+    <div class="form-group"><label>Notes</label><input type="text" id="exerciseNotes" placeholder="How did it feel?"/></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('workoutModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveExercise()">Save Exercise</button>
+    </div>
+  </div>
+</div>
+
+<!-- Meal Modal -->
+<div class="modal-overlay hidden" id="mealModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Meal Item</h3>
+      <button class="modal-close-btn" onclick="closeModal('mealModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group">
+      <label>Meal Type</label>
+      <select id="mealType">
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        <option value="snack">Snack</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Food Item *</label><input type="text" id="mealItemName" placeholder="e.g. Chicken Breast"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Calories (kcal)</label><input type="number" id="mealCalories" placeholder="165"/></div>
+      <div class="form-group"><label>Protein (g)</label><input type="number" id="mealProtein" placeholder="31"/></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Carbs (g)</label><input type="number" id="mealCarbs" placeholder="0"/></div>
+      <div class="form-group"><label>Fat (g)</label><input type="number" id="mealFat" placeholder="3.6"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('mealModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveMealItem()">Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal-overlay hidden" id="noteModal">
+  <div class="modal-box modal-box-wide">
+    <div class="modal-header">
+      <h3 id="noteModalTitle">New Note</h3>
+      <button class="modal-close-btn" onclick="closeModal('noteModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Title *</label><input type="text" id="noteTitle" placeholder="Note title..."/></div>
+    <div class="form-group">
+      <label>Tag</label>
+      <select id="noteTag">
+        <option>General</option><option>Study</option><option>Code</option>
+        <option>Internship</option><option>Health</option><option>Ideas</option>
+      </select>
+    </div>
+    <div class="note-editor-toolbar">
+      <button onclick="formatNote('bold')"><i class="fa fa-bold"></i></button>
+      <button onclick="formatNote('italic')"><i class="fa fa-italic"></i></button>
+      <button onclick="formatNote('underline')"><i class="fa fa-underline"></i></button>
+      <button onclick="insertCode()"><i class="fa fa-code"></i></button>
+      <button onclick="insertBullet()"><i class="fa fa-list-ul"></i></button>
+    </div>
+    <div class="form-group">
+      <div id="noteContent" class="note-content-editor" contenteditable="true" placeholder="Write your note here..."></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('noteModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveNote()"><i class="fa fa-save"></i> Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- Event Modal -->
+<div class="modal-overlay hidden" id="eventModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Event</h3>
+      <button class="modal-close-btn" onclick="closeModal('eventModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Event Title *</label><input type="text" id="eventTitle" placeholder="Event title..."/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Date *</label><input type="date" id="eventDate"/></div>
+      <div class="form-group"><label>Time</label><input type="time" id="eventTime"/></div>
+    </div>
+    <div class="form-group">
+      <label>Type</label>
+      <select id="eventType">
+        <option value="event">📅 Event</option>
+        <option value="deadline">⚠️ Deadline</option>
+        <option value="exam">📝 Exam</option>
+        <option value="reminder">🔔 Reminder</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="eventNotes" rows="2" placeholder="Details..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveEvent()">Save Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- Subject Modal -->
+<div class="modal-overlay hidden" id="subjectModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Subject</h3>
+      <button class="modal-close-btn" onclick="closeModal('subjectModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Subject Name *</label><input type="text" id="subjectName" placeholder="e.g. Data Structures"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Total Classes</label><input type="number" id="subjectTotal" value="60"/></div>
+      <div class="form-group"><label>Attended</label><input type="number" id="subjectAttended" value="0"/></div>
+    </div>
+    <div class="form-group"><label>Color</label><input type="color" id="subjectColor" value="#6366f1"/></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('subjectModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveSubject()">Add Subject</button>
+    </div>
+  </div>
+</div>
+
+<!-- Project Modal -->
+<div class="modal-overlay hidden" id="projectModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Project</h3>
+      <button class="modal-close-btn" onclick="closeModal('projectModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Project Name *</label><input type="text" id="projectName" placeholder="e.g. Ascend OS"/></div>
+    <div class="form-group"><label>Description</label><textarea id="projectDesc" rows="2" placeholder="What is this project about?"></textarea></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>GitHub URL</label><input type="url" id="projectGithub" placeholder="https://github.com/..."/></div>
+      <div class="form-group"><label>Live Demo URL</label><input type="url" id="projectDemo" placeholder="https://..."/></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Status</label>
+        <select id="projectStatus">
+          <option value="planning">🧠 Planning</option>
+          <option value="inprogress">⚙️ In Progress</option>
+          <option value="done">✅ Completed</option>
+          <option value="paused">⏸️ Paused</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Completion %</label><input type="number" id="projectPct" value="0" min="0" max="100"/></div>
+    </div>
+    <div class="form-group"><label>Tech Stack</label><input type="text" id="projectStack" placeholder="HTML, CSS, JavaScript"/></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('projectModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Goal Modal -->
+<div class="modal-overlay hidden" id="goalModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Goal</h3>
+      <button class="modal-close-btn" onclick="closeModal('goalModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Goal Title *</label><input type="text" id="goalTitle" placeholder="e.g. Get Placed in Top Company"/></div>
+    <div class="form-group"><label>Description</label><textarea id="goalDesc" rows="2" placeholder="What does achieving this look like?"></textarea></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Deadline</label><input type="date" id="goalDeadline"/></div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="goalCategory">
+          <option>Career</option><option>Health</option><option>Study</option>
+          <option>Finance</option><option>Personal</option><option>Fitness</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Current Progress %</label><input type="number" id="goalProgress" value="0" min="0" max="100"/></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('goalModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveGoal()">Save Goal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Internship Task Modal -->
+<div class="modal-overlay hidden" id="internshipTaskModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Internship Task</h3>
+      <button class="modal-close-btn" onclick="closeModal('internshipTaskModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Task *</label><input type="text" id="internTaskTitle" placeholder="Task description..."/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Deadline</label><input type="date" id="internTaskDeadline"/></div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select id="internTaskPriority">
+          <option value="high">🔴 High</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('internshipTaskModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveInternTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Certificate Modal -->
+<div class="modal-overlay hidden" id="certModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Certificate</h3>
+      <button class="modal-close-btn" onclick="closeModal('certModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Certificate Name *</label><input type="text" id="certName" placeholder="e.g. React Developer Certificate"/></div>
+    <div class="form-group"><label>Issuer</label><input type="text" id="certIssuer" placeholder="e.g. freeCodeCamp"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Date Earned</label><input type="date" id="certDate"/></div>
+      <div class="form-group"><label>Certificate URL</label><input type="url" id="certUrl" placeholder="https://..."/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('certModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveCert()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Assignment Modal -->
+<div class="modal-overlay hidden" id="assignmentModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Assignment</h3>
+      <button class="modal-close-btn" onclick="closeModal('assignmentModal')"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="form-group"><label>Assignment Title *</label><input type="text" id="assignTitle" placeholder="e.g. DSA Assignment 3"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label>Subject</label><input type="text" id="assignSubject" placeholder="Subject name"/></div>
+      <div class="form-group"><label>Deadline *</label><input type="date" id="assignDeadline"/></div>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="assignNotes" rows="2" placeholder="Requirements, links, notes..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('assignmentModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveAssignment()">Add Assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay hidden" id="confirmDialog">
+  <div class="confirm-box">
+    <div class="confirm-icon"><i class="fa fa-exclamation-triangle"></i></div>
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMsg">This action cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="btn-secondary" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-danger" id="confirmOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
