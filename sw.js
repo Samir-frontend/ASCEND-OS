@@ -1,9 +1,9 @@
 // Ascend OS — Service Worker (enables offline + installable app)
 const CACHE_NAME = 'ascend-os-v1';
 const FILES_TO_CACHE = [
-  './ascend-os.html',
-  './ascend-style.css',
-  './ascend-script.js',
+  './index.html',
+  './style.css',
+  './script.js',
   './manifest.json'
 ];
 
