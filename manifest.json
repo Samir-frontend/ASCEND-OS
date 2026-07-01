@@ -2,7 +2,7 @@
   "name": "Ascend OS - Personal Growth System",
   "short_name": "Ascend OS",
   "description": "Your personal growth operating system",
-  "start_url": "./ascend-os.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#6366f1",
